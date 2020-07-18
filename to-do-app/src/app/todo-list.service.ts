@@ -7,15 +7,19 @@ import { TodoListStorageService } from './todo-list-storage.service';
 export class TodoListService {
   constructor(private storage: TodoListStorageService) {}
 
-  getTodoList(): Array<{ title: string }> {
+  getTodoList(): Map<string, boolean> {
     return this.storage.get();
   }
 
-  addItem(item: { title: string }): Array<{ title: string }> {
-    return this.storage.post(item);
+  addItem(title: string): Map<string, boolean> {
+    return this.storage.post(title);
   }
 
-  removeItem(item: { title: string }): Array<{ title: string }> {
-    return this.storage.destroy(item);
+  removeItem(title: string): Map<string, boolean> {
+    return this.storage.destroy(title);
+  }
+
+  completeItem(title: string, checked: boolean): Map<string, boolean> {
+    return this.storage.put(title, checked);
   }
 }

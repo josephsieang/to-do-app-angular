@@ -6,10 +6,12 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./item.component.css'],
 })
 export class ItemComponent implements OnInit {
-  @Input() todoItem: { title: string };
-  @Output() remove: EventEmitter<{ title: string }> = new EventEmitter();
-
-  isComplete: boolean = false;
+  @Input() todoItem: { key: string; value: boolean };
+  @Output() remove: EventEmitter<string> = new EventEmitter();
+  @Output() complete: EventEmitter<{
+    title: string;
+    checked: boolean;
+  }> = new EventEmitter();
 
   constructor() {}
 
@@ -17,11 +19,14 @@ export class ItemComponent implements OnInit {
 
   removeItem(): void {
     if (confirm('Are you sure to delete this item?')) {
-      this.remove.emit(this.todoItem);
+      this.remove.emit(this.todoItem.key);
     }
   }
 
   completeItem(): void {
-    this.isComplete = !this.isComplete;
+    this.complete.emit({
+      title: this.todoItem.key,
+      checked: !this.todoItem.value,
+    });
   }
 }

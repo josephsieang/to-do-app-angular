@@ -1,55 +1,56 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
+import { HelperService } from './helper.service';
 
 const storageName = 'joseph_todo_list';
-const defaultList = [
-  { title: 'install NodeJS' },
-  { title: 'install Angular CLI' },
-  { title: 'create new app' },
-  { title: 'serve app' },
-  { title: 'develop app' },
-  { title: 'deploy app' },
-];
+const defaultList = new Map();
+defaultList.set('install NodeJS', false);
+defaultList.set('install Angular CLI', false);
+defaultList.set('create new app', false);
+defaultList.set('serve app', false);
+defaultList.set('develop app', false);
+defaultList.set('deploy app', false);
 
 @Injectable({
   providedIn: 'root',
 })
 export class TodoListStorageService {
-  private todoList: Array<{ title: string }>;
+  private todoList: Map<string, boolean>;
 
-  constructor() {
-    this.todoList =
-      JSON.parse(localStorage.getItem(storageName)) || defaultList;
-    console.log('TodoListStorageService: ', this.todoList);
+  constructor(private helperService: HelperService) {
+    if (localStorage.getItem(storageName) !== null)
+      this.todoList = this.helperService.jsonToMap(
+        localStorage.getItem(storageName)
+      );
+    else this.todoList = defaultList;
+    console.log('defaultList: ', defaultList);
+    console.log('this.todoList: ', this.todoList);
   }
 
-  get(): Array<{ title: string }> {
+  get(): Map<string, boolean> {
     return this.todoList;
   }
 
-  private update(): Array<{ title: string }> {
-    localStorage.setItem(storageName, JSON.stringify(this.todoList));
+  private update(): Map<string, boolean> {
+    localStorage.setItem(
+      storageName,
+      this.helperService.mapToJson(this.todoList)
+    );
+    console.log(this.get());
     return this.get();
   }
 
-  post(item: { title: string }): Array<{ title: string }> {
-    this.todoList.push(item);
+  post(title: string): Map<string, boolean> {
+    this.todoList.set(title, false);
     return this.update();
   }
 
-  private findItemIndex(item: { title: string }): number {
-    return this.todoList.indexOf(item);
-  }
-
-  put(
-    item: { title: string },
-    changes: { title: string }
-  ): Array<{ title: string }> {
-    Object.assign(this.todoList[this.findItemIndex(item)], changes);
+  put(title: string, checked: boolean): Map<string, boolean> {
+    this.todoList.set(title, checked);
     return this.update();
   }
 
-  destroy(item: { title: string }): Array<{ title: string }> {
-    this.todoList.splice(this.findItemIndex(item), 1);
+  destroy(title: string): Map<string, boolean> {
+    this.todoList.delete(title);
     return this.update();
   }
 }

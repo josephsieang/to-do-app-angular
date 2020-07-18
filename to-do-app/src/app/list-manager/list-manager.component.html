@@ -2,8 +2,12 @@
   <todo-header></todo-header>
   <todo-input (submit)="addItem($event)"></todo-input>
   <ul>
-    <li *ngFor="let item of todoList">
-      <todo-item [todoItem]="item" (remove)="removeItem($event)"></todo-item>
+    <li *ngFor="let item of todoList | keyvalue: compareFn">
+      <todo-item
+        [todoItem]="item"
+        (remove)="removeItem($event)"
+        (complete)="completeItem($event)"
+      ></todo-item>
     </li>
   </ul>
 </div>
