@@ -1,0 +1,17 @@
+.todo-input {
+  padding: 4px 10px;
+  margin-right: 10px;
+  font-size: 16px;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  line-height: 20px;
+  border: solid 1px #dddddd;
+  border-radius: 5px;
+  flex-grow: 1;
+}
+
+.container {
+  display: flex;
+  flex: 1;
+  padding: 0;
+}

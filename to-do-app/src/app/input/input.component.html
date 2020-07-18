@@ -1,0 +1,12 @@
+<!-- property binding: surround the wanted property with square brackets and pass it the class member -->
+<!-- property binding not limited to class properties, but also can be a method call -->
+<div class="container">
+  <input
+    class="todo-input"
+    type="text"
+    [value]="title"
+    (keyup.enter)="submitValue($event.target.value)"
+    #inputRef
+  />
+  <button class="btn" (click)="submitValue(inputRef.value)">Save</button>
+</div>
